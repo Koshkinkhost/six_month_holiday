@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Главная — Наша история 💗</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Comfortaa', cursive;
+      margin: 0; padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 0 30px;
+      height: 60px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 10px #550055aa;
+      user-select: none;
+    }
+
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+
+    header nav a {
+      color: #cc99ff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    header nav a:hover {
+      color: #ff99cc;
+    }
+
+    .nav-link.active {
+      color: #ff99cc;
+    }
+
+    .points-display {
+      font-size: 18px;
+      color: #ff66cc;
+      min-width: 110px;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    main {
+      flex-grow: 1;
+      padding: 40px 30px;
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+   .text-line {
+  position: relative;
+  padding: 15px 25px;
+  margin: 30px 0;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  font-size: 22px;
+  color: #ffe6f0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  background: transparent;
+}
+
+.text-line::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(130deg, #ff99cc, #cc66ff, #9966ff, #ff99cc);
+  background-size: 400% 400%;
+  animation: neonBorder 6s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.fancy-title {
+
+  /* ...предыдущие стили */
+
+  font-family: 'Great Vibes', cursive;
+  font-size: 60px;
+  color: transparent;
+  background: linear-gradient(90deg, #ff99cc, #cc66ff, #99ccff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-align: center;
+  margin: 40px 0;
+  transition: transform 0.2s ease, text-shadow 0.4s ease;
+  text-shadow: 0 0 10px #ff99cc66;
+  will-change: transform;
+}
+
+.fancy-title:hover {
+  text-shadow: 0 0 10px #ff99ccaa, 0 0 5px #cc66ffaa;
+  transform: scale(1.05);
+  cursor:
+}
+
+@keyframes neonBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+    .text-line:hover {
+      color: #ffccee;
+    }
+    
+
+    .hidden {
+      display: none;
+    }
+
+    .fade-in {
+      display: block;
+      animation: slideFade 0.8s ease forwards;
+    }
+
+    @keyframes slideFade {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="nav-link active">Главная</a>
+    <a href="quest.html" class="nav-link">Квест воспоминаний</a>
+    <a href="shop.html" class="nav-link">Магазин воспоминаний</a>
+    <a href="quotes.html" class="nav-link">Фонд цитат</a>
+  </nav>
+  <div class="points-display">
+    Баллы: <span id="points">0</span>
+  </div>
+</header>
+
+<main>
+<h1 class="fancy-title">Six Months Holiday 💗</h1>
+
+  <p id="line1" class="text-line">
+   Привет,милая
+  </p>
+
+  <p id="line2" class="text-line hidden">
+    Полгода с тобой пролетели как один день
+  </p>
+
+  <p id="line3" class="text-line hidden">
+    Потому что, когда ты счастлив,время не значит ничего, и ты находишься в другой системе координат
+  </p>
+  <p id="line4" class="text-line hidden">
+    Я люблю тебя.Отвечай на вопросы и получай баллы,а затем покупай за них наши воспоминания
+</p>
+</main>
+
+<script>
+  const pointsDisplay = document.getElementById('points');
+  const points = Number(localStorage.getItem('questPoints')) || 0;
+  pointsDisplay.textContent = points;
+
+  const line1 = document.getElementById('line1');
+  const line2 = document.getElementById('line2');
+  const line3 = document.getElementById('line3');
+    const line4 = document.getElementById('line4');
+
+  line1.addEventListener('click', () => {
+    if (line2.classList.contains('hidden')) {
+      line2.classList.remove('hidden');
+      line2.classList.add('fade-in');
+    }
+  });
+
+  line2.addEventListener('click', () => {
+    if (line3.classList.contains('hidden')) {
+      line3.classList.remove('hidden');
+      line3.classList.add('fade-in');
+    }
+    
+  });
+   line3.addEventListener('click', () => {
+    if (line4.classList.contains('hidden')) {
+      line4.classList.remove('hidden');
+      line4.classList.add('fade-in');
+    }
+    
+  });
+  const title = document.querySelector('.fancy-title');
+
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 10;
+    const y = (e.clientY / window.innerHeight - 0.5) * 10;
+    title.style.transform = `rotateX(${-y}deg) rotateY(${x}deg) scale(1.02)`;
+  });
+
+  document.addEventListener('mouseleave', () => {
+    title.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+  });
+  
+</script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Фонд цитат 💬</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: #121212;
+      color: #fff;
+      font-family: 'Comfortaa', cursive;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1f1f1f;
+      padding: 0 30px;
+      height: 60px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 10px #550055aa;
+      user-select: none;
+    }
+
+    header nav {
+      display: flex;
+      align-items: center;
+    }
+
+    header nav a {
+      color: #cc99ff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+
+    header nav a:hover {
+      color: #ff99cc;
+    }
+
+    .nav-link.active {
+      color: #ff99cc;
+    }
+
+    .points-display {
+      font-size: 18px;
+      color: #ff66cc;
+      min-width: 110px;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+
+    .bubble {
+      background: #ffb3da;
+      color: #222;
+      border-radius: 50% 50% 40% 60% / 60% 50% 50% 40%;
+      padding: 40px 60px;
+      font-size: 18px;
+      font-weight: bold;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 20px #ff6fcf88;
+      transition: transform 0.3s ease, opacity 0.5s ease;
+      cursor: pointer;
+      user-select: none;
+      opacity: 1;
+    }
+
+    .bubble.hidden {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="nav-link">Главная</a>
+    <a href="quest.html" class="nav-link">Квест воспоминаний</a>
+    <a href="shop.html" class="nav-link">Магазин воспоминаний</a>
+    <a href="quotes.html" class="nav-link active">Фонд цитат</a>
+  </nav>
+  <div class="points-display">
+    Баллы: <span id="points">0</span>
+  </div>
+</header>
+
+<main>
+  <div id="quoteBubble" class="bubble">Нажми на меня 💖</div>
+</main>
+
+<script>
+  const quotes = [
+    "Сейчас я тебя захвалю и ты зазнаешься.Ты и так самовлюбленный.",
+    "Распробовала и меня,и сыр.",
+    "Отличная песня,ставлю ей 3 из 10🤣.",
+    "Мне нравится как ты играешь на контрасте.\nВроде бы и такой `слышь ты` парень,а вроде и слезку в аэропорту можешь пустить.",
+    "Блин,я сейчас так не хочу в бассейн ехать.",
+    "Твоей будущей девушке очень повезет.",
+    "Потому что ты ЕБАНЭ.",
+    "Жаль,что так,Лиз",
+    "Жаль,что так,Борь",
+    "Хожу и думаю `Что-то меня клинит` Не могу понять что",
+    "Молю вас,позвольте!!"
+  ];
+
+  let unusedQuotes = [...quotes]; // копия массива
+
+  const pointsDisplay = document.getElementById('points');
+  const storedPoints = Number(localStorage.getItem('questPoints')) || 0;
+  pointsDisplay.textContent = storedPoints;
+
+  const bubble = document.getElementById("quoteBubble");
+
+  bubble.addEventListener("click", () => {
+    bubble.classList.add("hidden");
+
+    setTimeout(() => {
+      // если цитаты закончились, перезапускаем
+      if (unusedQuotes.length === 0) {
+        unusedQuotes = [...quotes];
+      }
+
+      // выбираем случайную цитату из оставшихся
+      const index = Math.floor(Math.random() * unusedQuotes.length);
+      const quote = unusedQuotes[index];
+
+      // удаляем её из массива
+      unusedQuotes.splice(index, 1);
+
+      bubble.textContent = quote;
+      bubble.classList.remove("hidden");
+    }, 400);
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Квест-воспоминаний 💗</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: 'Comfortaa', cursive;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 15px 30px;
+      font-size: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 0 10px #550055aa;
+    }
+    header nav {
+      display: flex;
+    }
+    header nav a {
+      color: #cc99ff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.3s;
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+    header nav a:hover {
+      color: #ff99cc;
+    }
+    .nav-link.active {
+      color: #ff99cc;
+    }
+    .points-display {
+      font-size: 18px;
+      color: #ff66cc;
+      min-width: 110px;
+      text-align: right;
+    }
+    main {
+      flex-grow: 1;
+      padding: 40px 30px;
+      max-width: 900px;
+      margin: 0 auto;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    .question-card {
+      background: #2a2a2a;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(74, 47, 82, 0.5);
+      margin-bottom: 30px;
+    }
+    .question-card h2 {
+      margin-top: 0;
+      color: #f9c5d1;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 15px;
+      background: #444;
+      color: #eee;
+      box-sizing: border-box;
+    }
+    input[type="text"]::placeholder {
+      color: #bbb;
+    }
+    button {
+      margin-top: 18px;
+      background-color: #4a2f52;
+      border: none;
+      color: #f9c5d1;
+      padding: 10px 18px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #6e3f72;
+    }
+    .feedback {
+      margin-top: 15px;
+      font-weight: 600;
+      min-height: 28px;
+      text-align: center;
+    }
+    .feedback.correct {
+      color: #4caf50;
+    }
+    .feedback.wrong {
+      color: #e57373;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html" class="nav-link">Главная</a>
+    <a href="quest.html" class="nav-link active">Квест воспоминаний</a>
+    <a href="shop.html" class="nav-link">Магазин воспоминаний</a>
+    <a href="quotes.html" class="nav-link">Фонд цитат</a>
+  </nav>
+  <div class="points-display">Баллы: <span id="points">0</span></div>
+</header>
+
+<main>
+  <button onclick="resetProgress()" style="
+    margin: 10px auto 30px;
+    display: block;
+    background-color: #444;
+    color: #ffdada;
+    font-family: 'Comfortaa', sans-serif;
+    border: 2px dashed #ff87b4;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+  ">
+    🔄 Пройти сначала
+  </button>
+
+  <div class="question-card" id="question-card">
+    <h2 id="question-title">Вопрос 1</h2>
+    <p id="question-text">Где мы впервые встретились?</p>
+    <input type="text" id="answer-input" placeholder="Твой ответ..." autocomplete="off" />
+    <button id="submit-btn">Ответить</button>
+    <p class="feedback" id="feedback"></p>
+  </div>
+</main>
+
+<script>
+ const questions = [
+  {
+    text: "Наш любимый напиток ?",
+    answers: ["шорли", "шорли морли"]
+  },
+  {
+    text: "Где мы впервые встретились и влюбились?",
+    answers: ["У Полины", "У Полины", "на тусе"]
+  },
+  {
+    text: "Главный сериал  в наших отношениях?)",
+    answers: ["Трудные подростки", "трудные подростки"]
+  },
+  {
+    text: "Наше любимое место в Краснодаре",
+    answers: ["Красная 159"]
+  },
+  {
+    text: "От чего я схожу с ума глядя на тебя каждый раз?",
+    answers: ["От глаз","глаза"]
+  },
+  {
+    text: "Как называлась постановка,на которую мы ходили во время моего первого визита в Москву?",
+    answers: ["смертельный номер"]
+  },
+  {
+    text: "Страна,в которую мы мечтаем вместе съездить(у нас там важные дела)",
+    answers: ["Испания"]
+  }
+];
+
+let currentQuestionIndex = Number(sessionStorage.getItem("currentQuestion")) || 0;
+let points = Number(sessionStorage.getItem("quizPoints")) || 0;
+
+const pointsDisplay = document.getElementById("points");
+const questionTitle = document.getElementById("question-title");
+const questionText = document.getElementById("question-text");
+const answerInput = document.getElementById("answer-input");
+const feedback = document.getElementById("feedback");
+
+pointsDisplay.textContent = points;
+
+function loadQuestion() {
+  if (currentQuestionIndex >= questions.length) {
+    questionTitle.textContent = "Умничка💖 ";
+    questionText.textContent = "Ты ответила на все вопросы 🌸";
+    document.getElementById("submit-btn").style.display = "none";
+    answerInput.style.display = "none";
+    return;
+  }
+
+  questionTitle.textContent = `Вопрос ${currentQuestionIndex + 1}`;
+  questionText.textContent = questions[currentQuestionIndex].text;
+  answerInput.value = "";
+  feedback.textContent = "";
+}
+
+function checkAnswer() {
+  const input = answerInput.value.trim().toLowerCase();
+  const validAnswers = questions[currentQuestionIndex].answers.map(a => a.toLowerCase());
+
+  const matched = validAnswers.some(ans => input.includes(ans));
+
+  if (matched) {
+    feedback.textContent = "Правильно! +1 балл 🎉";
+    feedback.classList.add("correct");
+    feedback.classList.remove("wrong");
+
+    points += 1;
+    sessionStorage.setItem("quizPoints", points);
+  } else {
+    feedback.textContent = `Ты чего 😂 Это же: "${questions[currentQuestionIndex].answers[0]}"`;
+    feedback.classList.add("wrong");
+    feedback.classList.remove("correct");
+  }
+
+  currentQuestionIndex += 1;
+  sessionStorage.setItem("currentQuestion", currentQuestionIndex);
+  pointsDisplay.textContent = points;
+
+  setTimeout(loadQuestion, 3000);
+}
+
+function resetProgress() {
+  points = 0;
+  currentQuestionIndex = 0;
+
+  sessionStorage.removeItem("quizPoints");
+  sessionStorage.removeItem("currentQuestion");
+
+  // Удалим все открытые воспоминания
+  for (let key in sessionStorage) {
+    if (key.startsWith("memoryUnlocked_")) {
+      sessionStorage.removeItem(key);
+    }
+  }
+
+  pointsDisplay.textContent = points;
+  answerInput.value = "";
+  feedback.textContent = "";
+  feedback.classList.remove("correct", "wrong");
+  document.getElementById("submit-btn").style.display = "inline-block";
+  answerInput.style.display = "inline-block";
+
+  loadQuestion();
+}
+
+document.getElementById("submit-btn").addEventListener("click", checkAnswer);
+window.onload = loadQuestion;
+
+</script>
+
+</body>
+</html>

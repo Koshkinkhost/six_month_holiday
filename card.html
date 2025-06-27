@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сотри и узнай ❤️</title>
+  <style>
+    body {
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    canvas {
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 150, 200, 0.5);
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="scratchCanvas" width="400" height="300"></canvas>
+
+<script>
+  const canvas = document.getElementById('scratchCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+
+img.src = './moscow_couple.jpg'; // Пример
+  img.crossOrigin = "anonymous";
+
+  img.onload = function () {
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = '#888';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.globalCompositeOperation = 'destination-out';
+};
+
+
+
+  img.onerror = () => {
+    alert("❌ Картинка не загрузилась. Проверь ссылку или путь.");
+  };
+
+  let isDrawing = false;
+
+  function erase(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI * 2, false);
+    ctx.fill();
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    isDrawing = true;
+    erase(e.offsetX, e.offsetY);
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (isDrawing) erase(e.offsetX, e.offsetY);
+  });
+
+  canvas.addEventListener('mouseup', () => isDrawing = false);
+  canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+  canvas.addEventListener('touchstart', e => {
+    isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    erase(touch.clientX - rect.left, touch.clientY - rect.top);
+  });
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (isDrawing) {
+      const rect = canvas.getBoundingClientRect();
+      const touch = e.touches[0];
+      erase(touch.clientX - rect.left, touch.clientY - rect.top);
+    }
+  });
+
+  canvas.addEventListener('touchend', () => isDrawing = false);
+  
+</script>
+
+</body>
+</html>
