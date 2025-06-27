@@ -124,7 +124,7 @@
   let unusedQuotes = [...quotes]; // копия массива
 
   const pointsDisplay = document.getElementById('points');
-  const storedPoints = Number(localStorage.getItem('questPoints')) || 0;
+  const storedPoints = Number(sessionStorage.getItem('questPoints')) || 0;
   pointsDisplay.textContent = storedPoints;
 
   const bubble = document.getElementById("quoteBubble");
